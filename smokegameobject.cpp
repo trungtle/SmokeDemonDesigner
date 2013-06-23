@@ -25,12 +25,20 @@ SmokeGameObject::~SmokeGameObject()
     delete this->graphicsItem;
 }
 
-QGraphicsPixmapItem *SmokeGameObject::getGraphicsItem()
+QGraphicsPixmapItem*
+SmokeGameObject::getGraphicsItem(
+        )
 {
     return this->graphicsItem;
 }
 
-void SmokeGameObject::createTransformation(qreal x, qreal y, qreal z, qreal angle, qreal scale)
+void
+SmokeGameObject::createTransformation(
+        qreal x,
+        qreal y,
+        qreal z,
+        qreal angle,
+        qreal scale)
 {
     this->graphicsItem->setPos(QPointF(x, y));
     this->graphicsItem->setZValue(z);
@@ -48,7 +56,10 @@ void SmokeGameObject::createTransformation(qreal x, qreal y, qreal z, qreal angl
 
 }
 
-QStandardItem *SmokeGameObject::createLabelItem(QString name)
+QStandardItem*
+SmokeGameObject::createLabelItem(
+        QString name
+        )
 {
     QStandardItem* label = new QStandardItem(name);
     label->setSelectable(false);
@@ -57,7 +68,12 @@ QStandardItem *SmokeGameObject::createLabelItem(QString name)
     return label;
 }
 
-void SmokeGameObject::createLabelEditRow(QString label, QString value, QStandardItem* parent)
+void
+SmokeGameObject::createLabelEditRow(
+        QString label,
+        QString value,
+        QStandardItem* parent
+        )
 {
     QStandardItem* labelItem = this->createLabelItem(label);
     QStandardItem* editItem = new QStandardItem(value);

@@ -7,7 +7,6 @@
 #include <QDebug>
 
 #include "mainwindow.h"
-#include "smokesceneview.h"
 #include "spinboxdelegate.h"
 #include "ui_main_window.h"
 
@@ -17,8 +16,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //
+    // Create objects
+    //
+
     this->createActions();
     this->createCmdModel();
+
+    //
+    // Setup ui initial state
+    //
 
     this->prepareToolbar();
     this->prepareResourceView();
@@ -33,7 +40,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::createActions()
+void
+MainWindow::createActions(
+        )
 {
     QShortcut* ctrl_w = new QShortcut(QKeySequence("Ctrl+W"), this);
     QObject::connect(ctrl_w, SIGNAL(activated()), this, SLOT(closeCurrentSceneTab()));
@@ -45,7 +54,9 @@ void MainWindow::createActions()
     QObject::connect(ctrl_e, SIGNAL(activated()), this, SLOT(activateCmd()));
 }
 
-void MainWindow::createGrid()
+void
+MainWindow::createGrid(
+        )
 {
     int left = this->scene->sceneRect().left();
     int right = this->scene->sceneRect().right();
@@ -80,10 +91,16 @@ void MainWindow::createGrid()
     }
 }
 
-void MainWindow::createCmdModel()
+void
+MainWindow::createCmdModel(
+        )
 {
     this->cmdModel = new QStandardItemModel(0, 2, this);
     this->cmdModel->setHeaderData(0, Qt::Horizontal, QObject::tr("Commands"));
+
+    //
+    // @tle_todo: Move these help text out into resource files.
+    //
 
     //
     // Create add cmd
@@ -100,6 +117,10 @@ void MainWindow::createCmdModel()
     SmokeCmd cmdAdd(aliasAdd, helpAdd);
     this->createCmd(cmdAdd);
 
+    //
+    // Create goto cmd
+    //
+
     QStringList aliasGoto;
     aliasGoto << "goto" << ":";
     QString helpGoto = "\nDescription:\n" \
@@ -114,7 +135,10 @@ void MainWindow::createCmdModel()
     this->cmdModel->sort(0);
 }
 
-void MainWindow::createCmd(SmokeCmd &cmd)
+void
+MainWindow::createCmd(
+        SmokeCmd &cmd
+        )
 {
     this->cmdModel->insertRow(0);
 
@@ -131,7 +155,9 @@ void MainWindow::createCmd(SmokeCmd &cmd)
     this->cmdModel->setData(this->cmdModel->index(0, 1), cmd.helpInfo);
 }
 
-void MainWindow::createScene()
+void
+MainWindow::createScene(
+        )
 {
     //
     // Set size
@@ -139,7 +165,7 @@ void MainWindow::createScene()
 
     const int SCENE_SIZE = 10000;
 
-    this->scene = new QGraphicsScene();
+    this->scene = new SmokeGraphicsScene();
     this->scene->setSceneRect(
                 QRectF(
                     -(SCENE_SIZE / 2),
@@ -167,11 +193,13 @@ void MainWindow::createScene()
  *
  *          None.
  * -------------------------------------------------------------------------- */
-void MainWindow::prepareObjectInspector()
+void
+MainWindow::prepareObjectInspector(
+        )
 {
 //    this->gameObjectModel = new QStandardItemModel(0, 1, this);
 
-    //    QList<QStandardItem*> preparedRow;
+//    QList<QStandardItem*> preparedRow;
 //    preparedRow << new QStandardItem("test1");
 //    QStandardItem* item = this->gameObjectModel->invisibleRootItem();
 //    item->appendRow(preparedRow);
@@ -184,15 +212,20 @@ void MainWindow::prepareObjectInspector()
 //    ui->object_inspector->expandAll();
 
     ui->object_inspector->header()->setStyleSheet("color: black;");
-    ui->object_inspector->setItemDelegate(new SpinBoxDelegate(this));
+//    ui->object_inspector->setItemDelegate(new SpinBoxDelegate(ui->object_inspector));
 }
 
-void MainWindow::prepareSceneView(QGraphicsView* view)
+void
+MainWindow::prepareSceneView(
+        SmokeGraphicsView* view
+        )
 {
     view->setScene(this->scene);
 }
 
-void MainWindow::prepareSceneTab()
+void
+MainWindow::prepareSceneTab(
+        )
 {
     this->createScene();
 
@@ -201,7 +234,9 @@ void MainWindow::prepareSceneTab()
     QObject::connect(ui->scene_tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(closeCurrentSceneTab()));
 }
 
-void MainWindow::prepareCmdLine()
+void
+MainWindow::prepareCmdLine(
+        )
 {
     QCompleter* cmdCompleter = new QCompleter(this->cmdStringList, this);
 
@@ -210,7 +245,9 @@ void MainWindow::prepareCmdLine()
     QObject::connect(ui->cmd, SIGNAL(returnPressed()), this, SLOT(executeCmd()));
 }
 
-void MainWindow::prepareResourceView()
+void
+MainWindow::prepareResourceView(
+        )
 {
     // Remove focus border
     ui->resource_view->setAttribute(Qt::WA_MacShowFocusRect, false);
@@ -236,7 +273,9 @@ void MainWindow::prepareResourceView()
     ui->resource_view->setColumnWidth(3, 80);
 }
 
-void MainWindow::prepareCmdView()
+void
+MainWindow::prepareCmdView(
+        )
 {
     ui->cmd_view->setModel(this->cmdModel);
 
@@ -247,7 +286,9 @@ void MainWindow::prepareCmdView()
                 SLOT(displayHelp(QModelIndex)));
 }
 
-void MainWindow::prepareToolbar()
+void
+MainWindow::prepareToolbar(
+        )
 {
     //
     // New object
@@ -272,7 +313,12 @@ void MainWindow::prepareToolbar()
 /* -----------------------------------------------------------------------------
  * HELPERS
  *--------------------------------------------------------------------------- */
-bool MainWindow::parseCoord(QString &string, double &x, double &y)
+bool
+MainWindow::parseCoord(
+        QString &string,
+        double &x,
+        double &y
+        )
 {
     QStringList xyList = string.split(' ', QString::SkipEmptyParts, Qt::CaseInsensitive);
 
@@ -294,7 +340,10 @@ bool MainWindow::parseCoord(QString &string, double &x, double &y)
     return false;
 }
 
-void MainWindow::displayHelp(QModelIndex index)
+void
+MainWindow::displayHelp(
+        QModelIndex index
+        )
 {
     //
     // Help index is of the same row of cmd, but column 1
@@ -309,26 +358,32 @@ void MainWindow::displayHelp(QModelIndex index)
 /* -----------------------------------------------------------------------------
  * SLOTS
  *--------------------------------------------------------------------------- */
-void MainWindow::activateCmd()
+void
+MainWindow::activateCmd(
+        )
 {
     ui->cmd->setFocus();
     ui->cmd->selectAll();
 }
 
-void MainWindow::addSceneTab()
+void
+MainWindow::addSceneTab(
+        )
 {
     //
     // Create view to append to new tab
     //
 
-    SmokeSceneView* view = new SmokeSceneView(this);
+    SmokeGraphicsView* view = new SmokeGraphicsView(this);
     this->prepareSceneView(view);
 
     int index = ui->scene_tabs->addTab(view, QString("New tab"));
     ui->scene_tabs->setCurrentIndex(index);
 }
 
-void MainWindow::closeCurrentSceneTab()
+void
+MainWindow::closeCurrentSceneTab(
+        )
 {
     //
     // If it's not the last tab, then close it
@@ -338,7 +393,11 @@ void MainWindow::closeCurrentSceneTab()
     ui->scene_tabs->removeTab(currentIndex);
 }
 
-void MainWindow::addGameObject(qreal x, qreal y)
+void
+MainWindow::addGameObject(
+        qreal x,
+        qreal y
+        )
 {
     this->currentGameObject = new SmokeGameObject(x, y);
 
@@ -362,15 +421,19 @@ void MainWindow::addGameObject(qreal x, qreal y)
 
 }
 
-void MainWindow::centerOn(qreal x, qreal y)
+void
+MainWindow::centerOn(
+        qreal x,
+        qreal y
+        )
 {
     //
     // @tle_todo: Current Widget doesn't work, investigate. Seems
     // like we can only select the 1st tab created.
     //
 
-    SmokeSceneView* view =
-            ui->scene_tabs->currentWidget()->findChild<SmokeSceneView*>();
+    SmokeGraphicsView* view =
+            ui->scene_tabs->currentWidget()->findChild<SmokeGraphicsView*>();
     if (view)
     {
         view->centerOn(x,y);
@@ -379,7 +442,9 @@ void MainWindow::centerOn(qreal x, qreal y)
     }
 }
 
-void MainWindow::executeCmd()
+void
+MainWindow::executeCmd(
+        )
 {
     QString command = ui->cmd->text();
     if(command.startsWith("add", Qt::CaseInsensitive) ||
@@ -412,7 +477,9 @@ void MainWindow::executeCmd()
     }
 }
 
-void MainWindow::updateInspector()
+void
+MainWindow::updateInspector(
+        )
 {
 
 }

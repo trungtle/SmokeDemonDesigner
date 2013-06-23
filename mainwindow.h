@@ -6,8 +6,15 @@
 #include <QStandardItemModel>
 #include <QGraphicsRectItem>
 #include <QGraphicsView>
+
+//
+// Custom Smoke classes
+//
+
+#include "smokegraphicsview.h"
 #include "smokecmd.h"
 #include "smokegameobject.h"
+#include "smokegraphicsscene.h"
 
 namespace Ui {
     class MainWindow;
@@ -26,37 +33,103 @@ private:
 
     SmokeGameObject* currentGameObject;
     QList<SmokeGameObject*> gameObjectList;
-    QGraphicsScene* scene;
+    SmokeGraphicsScene* scene;
     QStandardItemModel* cmdModel;
-    QList<SmokeCmd>* cmdList;
     QStringList cmdStringList;
 
-    void createActions();
-    void createGrid();
-    void createCmdModel();
-    void createCmd(SmokeCmd &cmd);
-    void createScene();
+    void
+    createActions(
+            );
 
-    void prepareToolbar();
-    void prepareResourceView();
-    void prepareCmdView();
-    void prepareObjectInspector();
-    void prepareSceneView(QGraphicsView *view);
-    void prepareSceneTab();
-    void prepareCmdLine();
+    void
+    createGrid(
+            );
+
+    void
+    createCmdModel(
+            );
+
+    void
+    createCmd(
+            SmokeCmd &cmd
+            );
+
+    void
+    createScene(
+            );
+
+    //
+    // Prepare initial state for widgets
+    //
+
+    void
+    prepareToolbar(
+            );
+
+    void
+    prepareResourceView(
+            );
+
+    void
+    prepareCmdView(
+            );
+
+    void
+    prepareObjectInspector();
+
+    void
+    prepareSceneView(SmokeGraphicsView *view);
+
+    void
+    prepareSceneTab();
+
+    void
+    prepareCmdLine();
 
     // Helpers
-    bool parseCoord(QString& string, double &x, double &y);
+    bool
+    parseCoord(
+            QString& string,
+            double &x,
+            double &y
+            );
 
 private slots:
-    void displayHelp(QModelIndex index);
-    void activateCmd();
-    void addSceneTab();
-    void closeCurrentSceneTab();
-    void addGameObject(qreal x, qreal y);
-    void centerOn(qreal x, qreal y);
-    void executeCmd();
-    void updateInspector();
+
+    void
+    displayHelp(
+            QModelIndex index
+            );
+
+    void
+    activateCmd(
+            );
+
+    void
+    addSceneTab();
+
+    void closeCurrentSceneTab(
+            );
+
+    void
+    addGameObject(
+            qreal x,
+            qreal y
+            );
+
+    void
+    centerOn(
+            qreal x,
+            qreal y
+            );
+
+    void
+    executeCmd(
+            );
+
+    void
+    updateInspector(
+            );
 };
 
 #endif // SMOKE_MAINWINDOW_H

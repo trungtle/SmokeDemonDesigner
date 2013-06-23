@@ -863,7 +863,7 @@ color: rgb(25, 25, 25);</string>
            <enum>QFrame::NoFrame</enum>
           </property>
           <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
+           <set>QAbstractItemView::SelectedClicked</set>
           </property>
           <property name="alternatingRowColors">
            <bool>false</bool>

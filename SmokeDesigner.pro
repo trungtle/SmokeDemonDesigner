@@ -13,18 +13,24 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    smokesceneview.cpp \
     mainwindow.cpp \
     smokecmd.cpp \
     smokegameobject.cpp \
-    spinboxdelegate.cpp
+    spinboxdelegate.cpp \
+    smokegraphicsview.cpp \
+    smokegraphicsitem.cpp \
+    smokegameobjectcomponent.cpp \
+    smokegraphicsscene.cpp
 
 HEADERS  += \
-    smokesceneview.h \
     mainwindow.h \
     smokecmd.h \
     smokegameobject.h \
-    spinboxdelegate.h
+    spinboxdelegate.h \
+    smokegraphicsview.h \
+    smokegraphicsitem.h \
+    smokegameobjectcomponent.h \
+    smokegraphicsscene.h
 
 FORMS    += \
     main_window.ui

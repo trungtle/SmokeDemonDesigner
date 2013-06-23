@@ -1,14 +1,18 @@
 #include <QKeyEvent>
-#include "smokesceneview.h"
+#include "smokegraphicsview.h"
 
-SmokeSceneView::SmokeSceneView(QWidget *parent) :
+SmokeGraphicsView::SmokeGraphicsView(QWidget *parent) :
     QGraphicsView(parent)
 {
     this->setDragMode(QGraphicsView::RubberBandDrag);
     this->centerOn(0,0);
 }
 
-void SmokeSceneView::keyPressEvent(QKeyEvent *event)
+SmokeGraphicsView::~SmokeGraphicsView()
+{
+}
+
+void SmokeGraphicsView::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Space) {
         this->setDragMode(QGraphicsView::ScrollHandDrag);
@@ -16,7 +20,7 @@ void SmokeSceneView::keyPressEvent(QKeyEvent *event)
     QGraphicsView::keyPressEvent(event);
 }
 
-void SmokeSceneView::keyReleaseEvent(QKeyEvent *event)
+void SmokeGraphicsView::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Space) {
         this->setDragMode(QGraphicsView::RubberBandDrag);

@@ -6,3 +6,7 @@ SmokeCmd::SmokeCmd(const QStringList &alias, const QString &helpInfo) :
     this->alias = alias;
     this->helpInfo = helpInfo;
 }
+
+SmokeCmd::~SmokeCmd()
+{
+}
