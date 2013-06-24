@@ -14,13 +14,27 @@ void SmokeGraphicsScene::setGridOn(bool isOn)
         // Turn on grid
         //
 
+        for (int i = 0; i < grid.lines.count(); i++) {
+            grid.lines.at(i)->show();
+        }
 
+        for (int i = 0; i < grid.coordinates.count(); i++) {
+            grid.lines.at(i)->show();
+        }
 
     } else {
 
         //
         // Hide grid
         //
+
+        for (int i = 0; i < grid.lines.count(); i++) {
+            grid.lines.at(i)->hide();
+        }
+
+        for (int i = 0; i < grid.coordinates.count(); i++) {
+            grid.lines.at(i)->hide();
+        }
     }
 }
 
@@ -33,12 +47,12 @@ void SmokeGraphicsScene::createGrid()
 
     for (int x = left; x < right; x+= 100)
     {
-        grid.lines << QGraphicsLineItem(x, top, x, bottom, QPen(Qt::darkGray));
+        grid.lines << new QGraphicsLineItem(x, top, x, bottom);
     }
 
     for (int y = top; y < bottom; y+= 100)
     {
-        grid.lines << QGraphicsLineItem(x, top, x, bottom, QPen(Qt::darkGray));
+        grid.lines << new QGraphicsLineItem(y, left, y, right);
     }
 
     //
@@ -50,7 +64,7 @@ void SmokeGraphicsScene::createGrid()
         for (int y = top; y < bottom; y+= 100) {
 
             QGraphicsSimpleTextItem* coordLabel =
-                    QGraphicsSimpleTextItem(QString("%1,%2").arg(x).arg(y));
+                    new QGraphicsSimpleTextItem(QString("%1,%2").arg(x).arg(y));
             coordLabel->setBrush(Qt::darkGray);
             coordLabel->setFont(font);
             coordLabel->setPos(x, y);

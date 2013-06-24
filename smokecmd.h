@@ -3,6 +3,8 @@
 
 #include <QString>
 #include <QStandardItem>
+#include <QUndoCommand>
+#include "smokegraphicsscene.h"
 
 class SmokeCmd : public QStandardItem
 {
@@ -18,7 +20,7 @@ public:
 class AddCommand : public QUndoCommand
 {
 public:
-    AddCommand(DiagramItem::DiagramType addType, QGraphicsScene *graphicsScene,
+    AddCommand(SmokeGraphicsScene *graphicsScene,
                QUndoCommand *parent = 0);
     ~AddCommand();
 
@@ -26,7 +28,6 @@ public:
     void redo();
 
 private:
-    DiagramItem *myDiagramItem;
     QGraphicsScene *myGraphicsScene;
     QPointF initialPosition;
 };

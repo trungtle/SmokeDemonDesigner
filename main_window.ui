@@ -763,7 +763,7 @@ background-color: rgb(72, 72, 72);</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="SmokeSceneView" name="graphics_view">
+              <widget class="SmokeGraphicsView" name="graphics_view">
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
                </property>
@@ -878,10 +878,10 @@ color: rgb(25, 25, 25);</string>
            <bool>true</bool>
           </property>
           <property name="headerHidden">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <attribute name="headerVisible">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
           <attribute name="headerStretchLastSection">
            <bool>false</bool>
@@ -961,9 +961,9 @@ color: rgb(25, 25, 25);</string>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>SmokeSceneView</class>
+   <class>SmokeGraphicsView</class>
    <extends>QGraphicsView</extends>
-   <header>smokesceneview.h</header>
+   <header>smokegraphicsview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

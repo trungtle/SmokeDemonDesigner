@@ -14,7 +14,7 @@ SmokeGameObject::SmokeGameObject(
         qreal scale) :
     QStandardItemModel(0, COLS)
 {
-    this->graphicsItem = new QGraphicsPixmapItem(QPixmap(TEXTURE_FILENAME));
+    this->graphicsItem = new SmokeGraphicsItem(QPixmap(TEXTURE_FILENAME));
     this->graphicsItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
 
     this->createTransformation(x, y, z, angle, scale);

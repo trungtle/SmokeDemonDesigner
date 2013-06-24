@@ -1,6 +1,9 @@
 #include "smokegraphicsitem.h"
 
-SmokeGraphicsItem::SmokeGraphicsItem(QObject *parent) :
-    QGraphicsItem(parent)
+SmokeGraphicsItem::SmokeGraphicsItem(
+        const QPixmap & pixmap,
+        QGraphicsItem * parent
+        ) :
+    QGraphicsPixmapItem(pixmap, parent)
 {
 }

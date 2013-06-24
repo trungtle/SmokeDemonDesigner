@@ -2,16 +2,17 @@
 #define SMOKEGRAPHICSITEM_H
 
 #include <QGraphicsPixmapItem>
-#include "smokegameobject.h"
 
 class SmokeGraphicsItem : public QGraphicsPixmapItem
 {
-    Q_OBJECT
+
 public:
-    explicit SmokeGraphicsItem(QObject *parent = 0);
+    explicit SmokeGraphicsItem(
+            const QPixmap & pixmap,
+            QGraphicsItem * parent = 0
+            );
 
 private:
-    SmokeGameObject* object;
     
 signals:
     

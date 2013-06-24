@@ -1,6 +1,6 @@
 #include "smokegameobjectcomponent.h"
 
-SmokeGameObjectComponent::SmokeGameObjectComponent()
+SmokeGameObjectComponent::SmokeGameObjectComponent(SmokeGameObjectComponentType_t)
 {
 }
 

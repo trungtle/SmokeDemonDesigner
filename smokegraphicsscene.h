@@ -2,11 +2,13 @@
 #define SMOKEGRAPHICSSCENE_H
 
 #include <QGraphicsScene>
+#include <QGraphicsLineItem>
+#include <QGraphicsSimpleTextItem>
 
 typedef struct _SmokeGrid_t
 {
     QList<QGraphicsLineItem*> lines;
-    QList<QGraphicsTextItem*> coordinates;
+    QList<QGraphicsSimpleTextItem*> coordinates;
 } SmokeGrid_t;
 
 
