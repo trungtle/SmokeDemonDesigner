@@ -7,7 +7,6 @@
 #include <QDebug>
 
 #include "mainwindow.h"
-#include "spinboxdelegate.h"
 #include "ui_main_window.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -52,43 +51,6 @@ MainWindow::createActions(
 
     QShortcut* ctrl_e = new QShortcut(QKeySequence("Ctrl+E"), this);
     QObject::connect(ctrl_e, SIGNAL(activated()), this, SLOT(activateCmd()));
-}
-
-void
-MainWindow::createGrid(
-        )
-{
-    int left = this->scene->sceneRect().left();
-    int right = this->scene->sceneRect().right();
-    int top = this->scene->sceneRect().top();
-    int bottom = this->scene->sceneRect().bottom();
-
-    for (int x = left; x < right; x+= 100)
-    {
-        this->scene->addLine(x, top, x, bottom, QPen(Qt::darkGray));
-    }
-
-    for (int y = top; y < bottom; y+= 100)
-    {
-        this->scene->addLine(left, y, right, y, QPen(Qt::darkGray));
-    }
-
-    //
-    // Display some misc coord values
-    //
-
-    QFont font("Museo Slab", 8);
-    for (int x = left; x < right; x+= 100) {
-        for (int y = top; y < bottom; y+= 100) {
-
-            QGraphicsSimpleTextItem* coordLabel =
-                    this->scene->addSimpleText(QString("%1,%2").arg(x).arg(y));
-            coordLabel->setBrush(Qt::darkGray);
-            coordLabel->setFont(font);
-            coordLabel->setPos(x, y);
-
-        }
-    }
 }
 
 void
@@ -165,17 +127,7 @@ MainWindow::createScene(
 
     const int SCENE_SIZE = 10000;
 
-    this->scene = new SmokeGraphicsScene();
-    this->scene->setSceneRect(
-                QRectF(
-                    -(SCENE_SIZE / 2),
-                    -(SCENE_SIZE / 2),
-                    SCENE_SIZE,
-                    SCENE_SIZE)
-                );
-
-    this->createGrid();
-
+    this->scene = new SmokeGraphicsScene(SCENE_SIZE, SCENE_SIZE, this);
     QObject::connect(
                 this->scene,
                 SIGNAL(selectionChanged()),

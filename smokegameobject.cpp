@@ -14,22 +14,22 @@ SmokeGameObject::SmokeGameObject(
         qreal scale) :
     QStandardItemModel(0, COLS)
 {
-    this->graphicsItem = new SmokeGraphicsItem(QPixmap(TEXTURE_FILENAME));
-    this->graphicsItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    m_graphicsItem = new SmokeGraphicsItem(QPixmap(TEXTURE_FILENAME));
+    m_graphicsItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
 
     this->createTransformation(x, y, z, angle, scale);
 }
 
 SmokeGameObject::~SmokeGameObject()
 {
-    delete this->graphicsItem;
+    delete m_graphicsItem;
 }
 
 QGraphicsPixmapItem*
 SmokeGameObject::getGraphicsItem(
         )
 {
-    return this->graphicsItem;
+    return m_graphicsItem;
 }
 
 void
@@ -40,19 +40,24 @@ SmokeGameObject::createTransformation(
         qreal angle,
         qreal scale)
 {
-    this->graphicsItem->setPos(QPointF(x, y));
-    this->graphicsItem->setZValue(z);
-    this->graphicsItem->setRotation(angle);
-    this->graphicsItem->setScale(scale);
+    m_components.insert("Transformation",
+                         new SmokeTransformationComponent(
+                            m_graphicsItem,
+                            x,
+                            y,
+                            z,
+                            angle,
+                            scale
+                            ));
 
     QStandardItem* transformationRoot = new QStandardItem("Transformation");
-    this->invisibleRootItem()->appendRow(transformationRoot);
+    invisibleRootItem()->appendRow(transformationRoot);
 
-    this->createLabelEditRow("x", QString("%1").arg(x), transformationRoot);
-    this->createLabelEditRow("y", QString("%1").arg(y), transformationRoot);
-    this->createLabelEditRow("z", QString("%1").arg(z), transformationRoot);
-    this->createLabelEditRow("Angle", QString("%1").arg(angle), transformationRoot);
-    this->createLabelEditRow("Scale", QString("%1").arg(scale), transformationRoot);
+    createLabelEditRow("x", QString("%1").arg(x), transformationRoot);
+    createLabelEditRow("y", QString("%1").arg(y), transformationRoot);
+    createLabelEditRow("z", QString("%1").arg(z), transformationRoot);
+    createLabelEditRow("Angle", QString("%1").arg(angle), transformationRoot);
+    createLabelEditRow("Scale", QString("%1").arg(scale), transformationRoot);
 
 }
 

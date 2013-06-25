@@ -16,21 +16,21 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     smokecmd.cpp \
     smokegameobject.cpp \
-    spinboxdelegate.cpp \
     smokegraphicsview.cpp \
     smokegraphicsitem.cpp \
     smokegameobjectcomponent.cpp \
-    smokegraphicsscene.cpp
+    smokegraphicsscene.cpp \
+    smoketransformationcomponent.cpp
 
 HEADERS  += \
     mainwindow.h \
     smokecmd.h \
     smokegameobject.h \
-    spinboxdelegate.h \
     smokegraphicsview.h \
     smokegraphicsitem.h \
     smokegameobjectcomponent.h \
-    smokegraphicsscene.h
+    smokegraphicsscene.h \
+    smoketransformationcomponent.h
 
 FORMS    += \
     main_window.ui

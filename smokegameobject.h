@@ -5,6 +5,7 @@
 #include <QGraphicsPixmapItem>
 #include <QAbstractItemModel>
 #include "smokegraphicsitem.h"
+#include "smoketransformationcomponent.h"
 
 const int ROWS = 100;
 const int COLS = 2;
@@ -27,8 +28,8 @@ public:
     //
 
 private:
-    SmokeGraphicsItem* graphicsItem;
-    QString m_objectData[ROWS][COLS];
+    SmokeGraphicsItem* m_graphicsItem;
+    QMap<QString, SmokeGameObjectComponent*> m_components;
 
     void
     createTransformation(
