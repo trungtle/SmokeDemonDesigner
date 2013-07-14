@@ -46,7 +46,6 @@ public:
             QWidget *)
         {
         }
-
 };
 
 /* ----------------------------------------------------------------------------
@@ -83,18 +82,21 @@ public:
     //
 
     void
-    setGridOn(bool isOn);
+    setGridOn(
+            bool isOn
+            );
 
 private:
 
-    SmokeGrid_t m_grid;
-    QList<SmokeLayer*> m_layers;
+    SmokeGrid_t         m_grid;
+    QList<SmokeLayer*>  m_layers;
 
     //
     // Helpers
     //
 
-    void createGrid();
+    void
+    createGrid();
 
 signals:
     

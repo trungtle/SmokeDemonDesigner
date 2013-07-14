@@ -1,4 +1,9 @@
-#include "smokegameobject.h"
+#include <QDebug>
+#include "SmokeGameobject.h"
+#include "SmokeIDComponent.h"
+#include "SmokeTransformationComponent.h"
+
+int SmokeGameObject::s_nextID = 0;
 
 //
 // @tle_todo: pass in as parameter instead
@@ -7,6 +12,7 @@
 const QString TEXTURE_FILENAME = ":/img/vision_ward.png";
 
 SmokeGameObject::SmokeGameObject(
+        QString name,
         qreal x,
         qreal y,
         qreal z,
@@ -14,22 +20,60 @@ SmokeGameObject::SmokeGameObject(
         qreal scale) :
     QStandardItemModel(0, COLS)
 {
-    m_graphicsItem = new SmokeGraphicsItem(QPixmap(TEXTURE_FILENAME));
-    m_graphicsItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    m_ID = s_nextID++;
 
+    if (name.isEmpty() || name == NULL) {
+
+        //
+        // Default name
+        //
+
+        m_name = QString("Obj#%1").arg(m_ID);
+
+    } else {
+        m_name = name;
+    }
+
+    m_graphicsItem =
+            new SmokeGraphicsItem(this, QPixmap(TEXTURE_FILENAME));
+
+    this->createIDComponent();
     this->createTransformation(x, y, z, angle, scale);
+
+    QObject::connect(
+                this,
+                SIGNAL(itemChanged(QStandardItem*)),
+                this,
+                SLOT(updateGraphics(QStandardItem*))
+                );
 }
 
 SmokeGameObject::~SmokeGameObject()
 {
-    delete m_graphicsItem;
 }
 
-QGraphicsPixmapItem*
+SmokeGraphicsItem*
 SmokeGameObject::getGraphicsItem(
         )
 {
     return m_graphicsItem;
+}
+
+void
+SmokeGameObject::createIDComponent()
+{
+    const QString name = SmokeIDComponent::NAME;
+    m_components.insert(name,
+                        new SmokeIDComponent(
+                            m_ID,
+                            m_name,
+                            m_graphicsItem,
+                            this
+                            )
+                        );
+
+    invisibleRootItem()->appendRow(
+                m_components[name]->inspectorItem());
 }
 
 void
@@ -40,79 +84,118 @@ SmokeGameObject::createTransformation(
         qreal angle,
         qreal scale)
 {
-    m_components.insert("Transformation",
+    const QString name = SmokeTransformationComponent::NAME;
+    m_components.insert(name,
                          new SmokeTransformationComponent(
-                            m_graphicsItem,
                             x,
                             y,
                             z,
                             angle,
-                            scale
+                            scale,
+                            m_graphicsItem,
+                            this
                             ));
 
-    QStandardItem* transformationRoot = new QStandardItem("Transformation");
-    invisibleRootItem()->appendRow(transformationRoot);
-
-    createLabelEditRow("x", QString("%1").arg(x), transformationRoot);
-    createLabelEditRow("y", QString("%1").arg(y), transformationRoot);
-    createLabelEditRow("z", QString("%1").arg(z), transformationRoot);
-    createLabelEditRow("Angle", QString("%1").arg(angle), transformationRoot);
-    createLabelEditRow("Scale", QString("%1").arg(scale), transformationRoot);
-
-}
-
-QStandardItem*
-SmokeGameObject::createLabelItem(
-        QString name
-        )
-{
-    QStandardItem* label = new QStandardItem(name);
-    label->setSelectable(false);
-    label->setEditable(false);
-    label->setBackground(QBrush(Qt::darkGray));
-    return label;
+    invisibleRootItem()->appendRow(
+                m_components[name]->inspectorItem());
 }
 
 void
-SmokeGameObject::createLabelEditRow(
-        QString label,
-        QString value,
-        QStandardItem* parent
+SmokeGameObject::updateModelItemPositionChange(
+        const QPointF newPos
         )
 {
-    QStandardItem* labelItem = this->createLabelItem(label);
-    QStandardItem* editItem = new QStandardItem(value);
+    const QString name = SmokeTransformationComponent::NAME;
 
-    QList<QStandardItem*> row;
-    row << labelItem << editItem;
-    parent->appendRow(row);
+    if (this == NULL || m_components.value((name)) == NULL) {
+        return;
+    }
+    m_components.value(name)->setProperty("x", newPos.x());
+    m_components.value(name)->updateInspectorItem("x");
+
+    m_components.value(name)->setProperty("y", newPos.y());
+    m_components.value(name)->updateInspectorItem("y");
+
+    emitDataChanged();
 }
 
-//QVariant SmokeGameObject::data(const QModelIndex &index, int role) const
-//{
-//    int row = index.row();
-//    int col = index.column();
+void
+SmokeGameObject::updateModelItemSelected(
+        const bool isSelected
+        )
+{
+    if (isSelected) {
+        emitDataChanged();
+    }
+}
 
-//    switch(role) {
-//    case Qt::DisplayRole:
-//        if (row == GAMEOBJ_TEXTURE) {
+void
+SmokeGameObject::emitDataChanged()
+{
+    //
+    // Update the item model
+    //
 
-//            //
-//            // Texture
-//            //
+    emit dataChanged(index(0,1), index(rowCount(), 1));
+}
 
-//            return TEXTURE_FILENAME;
-//        }
+void
+SmokeGameObject::updateGraphicsComponent(
+        SmokeGameObjectComponent* component,
+        QString property,
+        QVariant value
+        )
+{
+    component->setProperty(property, value);
+    component->updateGraphicsItem(property);
+}
 
-//        if (row == GAMEOBJ_TRANSFORMATION) {
+void
+SmokeGameObject::updateInspectorComponent(
+        SmokeGameObjectComponent *component,
+        QString property,
+        QVariant value
+        )
+{
+    component->setProperty(property, value);
+    component->updateInspectorItem(property);
+}
 
-//            //
-//            // Transformation
-//            //
-//            QString returnString =
-//                    QString("%1 %2 %3".arg(this->graphicsItem));
-//        }
-//    }
-//}
+int
+SmokeGameObject::ID()
+const
+{
+    return m_ID;
+}
 
+/* ----------------------------------------------------------------------------
+ * SLOTS
+ * ------------------------------------------------------------------------- */
+void
+SmokeGameObject::updateGraphics(
+        QStandardItem *item
+        )
+{
+    foreach(SmokeGameObjectComponent* component, m_components.values()) {
+
+        //
+        // Go through and check which component this item's change belong to
+        //
+
+        QStandardItem* componentInspectorItem = component->inspectorItem();
+
+        if (item->parent() == componentInspectorItem) {
+
+            QString property =
+                    componentInspectorItem->
+                    child(item->row(), 0)->
+                    data(Qt::DisplayRole).toString();
+
+            QVariant value = item->data(Qt::DisplayRole);
+
+            component->setProperty(property, value);
+            component->updateGraphicsItem(property);
+        }
+    }
+}
 

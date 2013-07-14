@@ -4,32 +4,75 @@
 #include <QStandardItem>
 #include <QGraphicsPixmapItem>
 #include <QAbstractItemModel>
-#include "smokegraphicsitem.h"
-#include "smoketransformationcomponent.h"
+#include "SmokeGraphicsItem.h"
+#include "SmokeGameObjectComponent.h"
 
 const int ROWS = 100;
 const int COLS = 2;
 
 class SmokeGameObject : public QStandardItemModel
 {
+    Q_OBJECT
 public:
-    explicit SmokeGameObject(qreal x,
+    explicit SmokeGameObject(
+            QString name,
+            qreal x,
             qreal y,
             qreal z = 0,
             qreal angle = 0,
             qreal scale = 1);
     ~SmokeGameObject();
 
-    QGraphicsPixmapItem*
+    //
+    // Graphics change that requires model update
+    //
+
+    void
+    updateModelItemPositionChange(
+            const QPointF newPosition
+            );
+
+    void
+    updateModelItemSelected(
+            const bool isSelected
+            );
+
+
+    //
+    // Accessors
+    //
+
+    SmokeGraphicsItem*
     getGraphicsItem();
+
+    int
+    ID() const;
 
     //
     // Subclass
     //
 
 private:
+
+    //
+    // Keeps track of the next available ID
+    //
+
+    static int s_nextID;
+    int m_ID;
+
+    QString m_name;
+
+    //
+    // Do not delete this graphics item as it is added to the scene
+    // and will be deleted by it
+    //
+
     SmokeGraphicsItem* m_graphicsItem;
     QMap<QString, SmokeGameObjectComponent*> m_components;
+
+    void
+    createIDComponent();
 
     void
     createTransformation(
@@ -40,21 +83,29 @@ private:
             qreal scale
             );
 
-    QStandardItem*
-    createLabelItem(
-            QString name
-            );
+    void
+    emitDataChanged();
 
     void
-    createLabelEditRow(
-            QString label,
-            QString value,
-            QStandardItem* parent
-            );
-    
+    updateGraphicsComponent(
+            SmokeGameObjectComponent* component,
+            QString property,
+            QVariant value);
+
+    void
+    updateInspectorComponent(
+            SmokeGameObjectComponent* component,
+            QString property,
+            QVariant value);
+
 signals:
     
-public slots:
+private slots:
+
+    void
+    updateGraphics(
+            QStandardItem* item
+            );
     
 };
 

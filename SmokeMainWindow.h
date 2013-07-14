@@ -11,10 +11,10 @@
 // Custom Smoke classes
 //
 
-#include "smokegraphicsview.h"
-#include "smokecmd.h"
-#include "smokegameobject.h"
-#include "smokegraphicsscene.h"
+#include "SmokegraphicsView.h"
+#include "SmokeCmd.h"
+#include "SmokeGameObject.h"
+#include "SmokeGraphicsScene.h"
 
 namespace Ui {
     class MainWindow;
@@ -113,6 +113,7 @@ private slots:
 
     void
     addGameObject(
+            QString name,
             qreal x,
             qreal y
             );
@@ -128,7 +129,7 @@ private slots:
             );
 
     void
-    updateInspector(
+    updateInspectorSelectionChanged(
             );
 };
 

@@ -1,4 +1,4 @@
-#include "smokecmd.h"
+#include "SmokeCmd.h"
 
 SmokeCmd::SmokeCmd(const QStringList &alias, const QString &helpInfo) :
     QStandardItem()

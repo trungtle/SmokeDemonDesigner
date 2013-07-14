@@ -6,7 +6,7 @@
 #include <QTime>
 #include <QDebug>
 
-#include "mainwindow.h"
+#include "SmokeMainwindow.h"
 #include "ui_main_window.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -94,6 +94,21 @@ MainWindow::createCmdModel(
     SmokeCmd cmdGoto(aliasGoto, helpGoto);
     this->createCmd(cmdGoto);
 
+    //
+    // Create grid command
+    //
+
+    QStringList aliasGrid;
+    aliasGrid << "grid";
+    QString helpGrid = "\nDescription:\n" \
+            "    Toggle grid on/off.\n" \
+            "\nUsage:\n" \
+            "    grid [on|off]\n" \
+            "\nExample:\n" \
+            "    grid off\n";
+    SmokeCmd cmdGrid(aliasGrid, helpGrid);
+    this->createCmd(cmdGrid);
+
     this->cmdModel->sort(0);
 }
 
@@ -132,7 +147,7 @@ MainWindow::createScene(
                 this->scene,
                 SIGNAL(selectionChanged()),
                 this,
-                SLOT(updateInspector()));
+                SLOT(updateInspectorSelectionChanged()));
 }
 
 /* -----------------------------------------------------------------------------
@@ -347,11 +362,12 @@ MainWindow::closeCurrentSceneTab(
 
 void
 MainWindow::addGameObject(
+        QString name,
         qreal x,
         qreal y
         )
 {
-    this->currentGameObject = new SmokeGameObject(x, y);
+    this->currentGameObject = new SmokeGameObject(name, x, y);
 
     //
     // Add to our list of objects
@@ -406,10 +422,12 @@ MainWindow::executeCmd(
         // Parse the coordinate
         //
 
-        QString xy = command.section(' ', 1);
+        QString xy = command.section(' ', 1, 2, QString::SectionSkipEmpty);
         double x, y;
         if (this->parseCoord(xy, x, y)) {
-            this->addGameObject(x, y);
+
+            QString name = command.section(' ', 3, 3);
+            this->addGameObject(name, x, y);
         }
 
     }
@@ -427,11 +445,26 @@ MainWindow::executeCmd(
         }
 
     }
+    else if(command.startsWith("grid", Qt::CaseInsensitive))
+    {
+        QString isOn = command.section(' ', 1);
+        if (isOn.compare("on", Qt::CaseInsensitive) == 0) {
+            scene->setGridOn(true);
+        } else if (isOn.compare("off", Qt::CaseInsensitive) == 0) {
+            scene->setGridOn(false);
+        }
+    }
 }
 
 void
-MainWindow::updateInspector(
+MainWindow::updateInspectorSelectionChanged(
         )
 {
-
+    if (scene->selectedItems().count() == 1) {
+        ui->object_inspector->setModel(static_cast<SmokeGraphicsItem*>(scene->selectedItems().at(0))->gameObject());
+        ui->object_inspector->resizeColumnToContents(0);
+        ui->object_inspector->expandAll();
+    } else {
+        ui->object_inspector->setModel(NULL);
+    }
 }

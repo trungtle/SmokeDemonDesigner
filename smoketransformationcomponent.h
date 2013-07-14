@@ -1,35 +1,33 @@
 #ifndef TRANSFORMATIONCOMPONENT_H
 #define TRANSFORMATIONCOMPONENT_H
 
-#include <QStandardItem>
 #include "smokegameobjectcomponent.h"
-
-typedef struct _SmokeCoordinate_t {
-    double x;
-    double y;
-    double z;
-} SmokeCoordinate_t;
-
-typedef struct _SmokeTransformation_t {
-    SmokeCoordinate_t coord;
-    double angle;
-    double scale;
-} SmokeTransformation_t;
 
 class SmokeTransformationComponent : public SmokeGameObjectComponent
 {
+
 public:
+    static const QString NAME;
+
     SmokeTransformationComponent(
-            SmokeGraphicsItem* item,
             double x,
             double y,
             double z = 0,
             double angle = 0, // in degree
-            double scale = 1
+            double scale = 1,
+            SmokeGraphicsItem* item = 0,
+            SmokeGameObject* parent = 0);
+
+    //
+    // Subclass implementation
+    //
+
+    void
+    updateGraphicsItem(
+            const QString property
             );
 
 private:
-    SmokeTransformation_t* m_transformation;
 
 };
 

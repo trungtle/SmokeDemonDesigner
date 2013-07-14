@@ -1,5 +1,5 @@
 #include <QDebug>
-#include "smokegraphicsscene.h"
+#include "SmokeGraphicsScene.h"
 
 SmokeGraphicsScene::SmokeGraphicsScene(
         qreal width,
@@ -16,7 +16,7 @@ SmokeGraphicsScene::SmokeGraphicsScene(
                 );
 
     //
-    // Initialize default layers
+    // Initial state
     //
 
     // SMOKE_LAYER_GRID
@@ -25,7 +25,8 @@ SmokeGraphicsScene::SmokeGraphicsScene(
     addLayer(new SmokeLayer());
 
     createGrid();
-    setGridOn(true);
+    setGridOn(false);
+
 }
 
 SmokeGraphicsScene::~SmokeGraphicsScene()
@@ -47,8 +48,21 @@ SmokeGraphicsScene::addItem(
         return;
     }
 
+    //
+    // Deselect all other items
+    //
+
+    foreach(QGraphicsItem* graphicsItem, selectedItems()) {
+        if (graphicsItem != item) {
+            graphicsItem->setSelected(false);
+        } else {
+            graphicsItem->setSelected(true);
+        }
+    }
+
     QGraphicsScene::addItem(item);
 
+    // @tle_todo: assign layer's parent (this doesn't seem like make hiding works)
     item->setParentItem(m_layers.at(layerIndex));
 
 }
@@ -114,10 +128,11 @@ SmokeGraphicsScene::createGrid()
     int top = sceneRect().top();
     int bottom = sceneRect().bottom();
 
+    const QColor darkGray(247, 247, 247, 20);
     for (int x = left; x < right; x+= 100)
     {
         QGraphicsLineItem *line = new QGraphicsLineItem(x, top, x, bottom);
-        line->setPen(QPen(Qt::darkGray));
+        line->setPen(QPen(darkGray));
 
         m_grid.lines << line;
         addItem(line);
@@ -126,7 +141,7 @@ SmokeGraphicsScene::createGrid()
     for (int y = top; y < bottom; y+= 100)
     {
         QGraphicsLineItem *line = new QGraphicsLineItem(left, y, right, y);
-        line->setPen(QPen(Qt::darkGray));
+        line->setPen(QPen(darkGray));
 
         m_grid.lines << line;
         addItem(line);
@@ -136,13 +151,13 @@ SmokeGraphicsScene::createGrid()
     // Display some coord values
     //
 
-    QFont font("Museo Slab", 8);
+    QFont font("Museo Slab", 12);
     for (int x = left; x < right; x+= 100) {
         for (int y = top; y < bottom; y+= 100) {
 
             QGraphicsSimpleTextItem* coordLabel =
                     new QGraphicsSimpleTextItem(QString("%1,%2").arg(x).arg(y));
-            coordLabel->setBrush(Qt::darkGray);
+            coordLabel->setBrush(darkGray);
             coordLabel->setFont(font);
             coordLabel->setPos(x, y);
 
@@ -151,4 +166,5 @@ SmokeGraphicsScene::createGrid()
         }
     }
 }
+
 

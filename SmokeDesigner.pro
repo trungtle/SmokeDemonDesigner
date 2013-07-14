@@ -12,25 +12,30 @@ TARGET = SmokeDesigner
 TEMPLATE = app
 
 
-SOURCES += main.cpp \
-    mainwindow.cpp \
-    smokecmd.cpp \
-    smokegameobject.cpp \
-    smokegraphicsview.cpp \
-    smokegraphicsitem.cpp \
-    smokegameobjectcomponent.cpp \
-    smokegraphicsscene.cpp \
-    smoketransformationcomponent.cpp
+SOURCES += \
+    SmokeHoverPoints.cpp \
+    SmokeIDComponent.cpp \
+    SmokeMainWindow.cpp \
+    SmokeCmd.cpp \
+    Main.cpp \
+    SmokeGameObject.cpp \
+    SmokeGameObjectComponent.cpp \
+    SmokeGraphicsItem.cpp \
+    SmokeGraphicsScene.cpp \
+    SmokeGraphicsView.cpp \
+    SmokeTransformationComponent.cpp
 
 HEADERS  += \
-    mainwindow.h \
-    smokecmd.h \
-    smokegameobject.h \
-    smokegraphicsview.h \
-    smokegraphicsitem.h \
-    smokegameobjectcomponent.h \
-    smokegraphicsscene.h \
-    smoketransformationcomponent.h
+    SmokeHoverPoints.h \
+    SmokeIDComponent.h \
+    SmokeMainWindow.h \
+    SmokeCmd.h \
+    SmokeGameObject.h \
+    SmokeGameObjectComponent.h \
+    SmokeGraphicsItem.h \
+    SmokeGraphicsScene.h \
+    SmokeGraphicsView.h \
+    SmokeTransformationComponent.h
 
 FORMS    += \
     main_window.ui

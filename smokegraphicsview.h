@@ -20,6 +20,11 @@ protected:
     keyReleaseEvent(
             QKeyEvent* event
             );
+    void
+    wheelEvent(
+            QWheelEvent* event
+            );
+
 
 private:
 

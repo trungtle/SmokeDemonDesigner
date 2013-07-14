@@ -4,13 +4,15 @@
 #include <QString>
 #include <QStandardItem>
 #include <QUndoCommand>
-#include "smokegraphicsscene.h"
+#include "SmokeGraphicsScene.h"
 
 class SmokeCmd : public QStandardItem
 {
 
 public:
-    explicit SmokeCmd(const QStringList &commandSyntax, const QString &helpInfo);
+    explicit SmokeCmd(
+            const QStringList &commandSyntax,
+            const QString &helpInfo);
     ~SmokeCmd();
 
     QStringList alias;
