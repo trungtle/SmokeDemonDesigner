@@ -15,11 +15,11 @@ SmokeGraphicsItem::SmokeGraphicsItem(
     // @tle_todo: Bogus text label
     //
 
-    m_label =
-            new QGraphicsSimpleTextItem(
-                QString("%1").arg(m_ID),
-                this
-                );
+    m_label = new QGraphicsSimpleTextItem();
+//            new QGraphicsSimpleTextItem(
+//                QString("%1").arg(m_ID),
+//                this
+//                );
 
     m_label->setPen(QPen(QColor(255, 100, 50, 115)));
     m_label->setBrush(QBrush(QColor(151, 0, 0, 115)));

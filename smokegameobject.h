@@ -23,6 +23,12 @@ public:
             qreal scale = 1);
     ~SmokeGameObject();
 
+    QVariant
+    data(
+            const QModelIndex &index,
+            int role = Qt::DisplayRole
+            ) const;
+
     //
     // Graphics change that requires model update
     //

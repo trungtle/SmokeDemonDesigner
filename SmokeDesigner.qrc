@@ -263,5 +263,6 @@
         <file>icons/stop-icon.png</file>
         <file>img/Troll_Face.png</file>
         <file>img/vision_ward.png</file>
+        <file>img/LizardSquare.png</file>
     </qresource>
 </RCC>

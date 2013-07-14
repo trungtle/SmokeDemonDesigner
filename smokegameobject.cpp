@@ -9,7 +9,7 @@ int SmokeGameObject::s_nextID = 0;
 // @tle_todo: pass in as parameter instead
 //
 
-const QString TEXTURE_FILENAME = ":/img/vision_ward.png";
+const QString TEXTURE_FILENAME = ":/img/LizardSquare.png";
 
 SmokeGameObject::SmokeGameObject(
         QString name,
@@ -199,3 +199,45 @@ SmokeGameObject::updateGraphics(
     }
 }
 
+QVariant
+SmokeGameObject::data(
+        const QModelIndex &index,
+        int role
+        ) const
+{
+    int row = index.row();
+    int col = index.column();
+    bool isComponentHeader = index.parent() == this->invisibleRootItem()->index();
+
+    switch(role)
+    {
+    case Qt::DisplayRole:
+        break;
+    case Qt::FontRole:
+        return QFont("Museo Slab", 12);
+        if (col == 0)
+        {
+            QFont boldFont;
+            boldFont.setBold(true);
+            return boldFont;
+        }
+        break;
+    case Qt::ForegroundRole:
+        if (isComponentHeader) {
+            return QVariant(QColor(30, 144, 255));
+        }
+
+        if (col == 0) {
+            return QVariant(QColor(128, 218, 17));
+        }
+        break;
+    case Qt::BackgroundRole:
+        break;
+    case Qt::TextAlignmentRole:
+        break;
+    case Qt::CheckStateRole:
+        break;
+    }
+
+    return QStandardItemModel::data(index, role);
+}

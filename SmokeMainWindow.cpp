@@ -73,9 +73,10 @@ MainWindow::createCmdModel(
     QString helpAdd = "\nDescription:\n" \
             "    Add a game object at specified location.\n" \
             "\nUsage:\n" \
-            "    add x y\n" \
+            "    add x y [name]\n" \
             "\nExample:\n" \
-            "    add 100 100";
+            "    add 100 100 Player\n"
+            "    a   231 12";
     SmokeCmd cmdAdd(aliasAdd, helpAdd);
     this->createCmd(cmdAdd);
 

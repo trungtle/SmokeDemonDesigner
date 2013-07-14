@@ -28,7 +28,6 @@ void SmokeGameObjectComponent::createInspectorItem()
 
         propertyName->setSelectable(false);
         propertyName->setEditable(false);
-        propertyName->setBackground(QBrush(Qt::darkGray));
 
         QStandardItem* propertyValue =
                 new QStandardItem(m_properties[key].toString());
