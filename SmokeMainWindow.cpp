@@ -374,10 +374,10 @@ MainWindow::addGameObject(
     // Add to our list of objects
     //
 
-    this->gameObjectList << this->currentGameObject;
-    this->scene->addItem(this->currentGameObject->getGraphicsItem());
+    gameObjectList << currentGameObject;
+    scene->addItem(currentGameObject->getGraphicsItem());
 
-    ui->object_inspector->setModel(this->currentGameObject);
+    ui->object_inspector->setModel(currentGameObject);
     ui->object_inspector->resizeColumnToContents(0);
     ui->object_inspector->expandAll();
 

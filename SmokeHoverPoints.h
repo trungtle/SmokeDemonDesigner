@@ -6,15 +6,18 @@
 #include <QGraphicsEllipseItem>
 #include <QGraphicsLineItem>
 
+class SmokeGraphicsItem;
+class SmokeHoverPoints;
+
 class SmokeHoverPoint : public QGraphicsEllipseItem
 {
 public:
-    explicit SmokeHoverPoint(
-            qreal x,
+    explicit SmokeHoverPoint(qreal x,
             qreal y,
             qreal w,
             qreal h,
-            QGraphicsItem* parent = 0
+            SmokeHoverPoints* pointGroup,
+            QGraphicsItem *parent
             );
 
     QVariant
@@ -22,13 +25,16 @@ public:
             QGraphicsItem::GraphicsItemChange change,
             const QVariant &value
             );
+private:
+    SmokeHoverPoints* m_pointGroup;
+
 };
 
 class SmokeHoverPoints
 {
 public:
     explicit SmokeHoverPoints(
-            QGraphicsItem *parent = 0
+            SmokeGraphicsItem *parent = 0
             );
     
     void
@@ -40,8 +46,26 @@ public:
     bool
     isSelected();
 
-private:
+    QGraphicsLineItem*
+    connectionLine()
+    {
+        return m_connectionLine;
+    }
 
+    SmokeHoverPoint*
+    anchorPoint()
+    {
+        return m_anchorPoint;
+    }
+
+    SmokeHoverPoint*
+    rotatePoint()
+    {
+        return m_rotatePoint;
+    }
+
+private:
+    SmokeGraphicsItem* m_parent;
     SmokeHoverPoint* m_anchorPoint;
     SmokeHoverPoint* m_rotatePoint;
     QGraphicsLineItem* m_connectionLine;

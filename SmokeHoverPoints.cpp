@@ -1,4 +1,6 @@
 #include <QDebug>
+#include "SmokeGraphicsScene.h"
+#include "SmokeGraphicsItem.h"
 #include "SmokeHoverPoints.h"
 
 const int size = 20;
@@ -9,13 +11,17 @@ SmokeHoverPoint::SmokeHoverPoint(
         qreal y,
         qreal w,
         qreal h,
-        QGraphicsItem *parent
+        SmokeHoverPoints* group,
+        QGraphicsItem* parent
         ) :
-    QGraphicsEllipseItem(x, y, w, h, parent)
+    QGraphicsEllipseItem(0, 0, w, h, parent)
 {
+    m_pointGroup = group;
+
+    setPos(x, y);
+
     setPen(QPen(QColor(255, 100, 50, alpha)));
     setBrush(QBrush(QColor(151, 0, 0, alpha)));
-
 }
 
 
@@ -25,17 +31,17 @@ SmokeHoverPoint::itemChange(
         const QVariant &value)
 {
     switch(change) {
-    case ItemPositionChange:
+    case ItemPositionHasChanged:
     {
-        break;
-    }
-    case ItemSelectedChange:
-    {
-        if (value.toBool()) {
-            show();
-        } else {
-            hide();
-        }
+
+        QGraphicsLineItem* connectionLine = m_pointGroup->connectionLine();
+        connectionLine->setLine(
+                    parentItem()->boundingRect().center().x(),
+                    parentItem()->boundingRect().center().y(),
+                    x() + size / 2,
+                    y() + size / 2
+                    );
+
         break;
     }
     default:
@@ -47,32 +53,10 @@ SmokeHoverPoint::itemChange(
 }
 
 SmokeHoverPoints::SmokeHoverPoints(
-        QGraphicsItem *parent
+        SmokeGraphicsItem *parent
         )
 {
-    m_anchorPoint =
-            new SmokeHoverPoint(
-                parent->boundingRect().center().x() - size / 2,
-                parent->boundingRect().center().y() - size / 2,
-                size,
-                size,
-                parent
-                );
-
-    m_rotatePoint =
-            new SmokeHoverPoint(
-                parent->boundingRect().right() + size,
-                parent->boundingRect().center().y() - size / 2,
-                size,
-                size,
-                parent
-                );
-
-    m_rotatePoint->setFlags(
-                QGraphicsItem::ItemIsMovable |
-                QGraphicsItem::ItemIsSelectable |
-                QGraphicsItem::ItemSendsGeometryChanges
-                );
+    m_parent = parent;
 
     m_connectionLine =
             new QGraphicsLineItem(
@@ -82,8 +66,31 @@ SmokeHoverPoints::SmokeHoverPoints(
                 parent->boundingRect().center().y(),
                 parent
                 );
-
     m_connectionLine->setPen(QPen(QColor(247, 247, 247, 50)));
+
+    m_anchorPoint =
+            new SmokeHoverPoint(
+                parent->boundingRect().center().x() - size / 2,
+                parent->boundingRect().center().y() - size / 2,
+                size,
+                size,
+                this,
+                parent
+                );
+
+    m_rotatePoint =
+            new SmokeHoverPoint(
+                parent->boundingRect().right() + size,
+                parent->boundingRect().center().y() - size / 2,
+                size,
+                size,
+                this,
+                parent
+                );
+    m_rotatePoint->setFlags(
+                    QGraphicsItem::ItemIsMovable |
+                    QGraphicsItem::ItemSendsGeometryChanges
+                    );
 }
 
 void

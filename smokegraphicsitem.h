@@ -10,6 +10,7 @@
 // Forward declarations
 //
 
+class SmokeGraphicsScene;
 class SmokeGameObject;
 
 class SmokeGraphicsItem : public QGraphicsPixmapItem
@@ -31,7 +32,6 @@ public:
     //
     // Accessors
     //
-
     SmokeGameObject*
     gameObject();
 

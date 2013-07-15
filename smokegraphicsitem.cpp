@@ -1,3 +1,4 @@
+#include "SmokeGraphicsScene.h"
 #include "SmokeGraphicsItem.h"
 #include "SmokeGameObject.h"
 
@@ -15,7 +16,7 @@ SmokeGraphicsItem::SmokeGraphicsItem(
     // @tle_todo: Bogus text label
     //
 
-    m_label = new QGraphicsSimpleTextItem();
+    m_label = new QGraphicsSimpleTextItem(this);
 //            new QGraphicsSimpleTextItem(
 //                QString("%1").arg(m_ID),
 //                this
@@ -48,7 +49,6 @@ SmokeGraphicsItem::SmokeGraphicsItem(
 
 SmokeGraphicsItem::~SmokeGraphicsItem()
 {
-    delete m_label;
 }
 
 void
@@ -69,6 +69,13 @@ SmokeGameObject
 *SmokeGraphicsItem::gameObject()
 {
     return m_object;
+}
+
+int
+SmokeGraphicsItem::ID()
+const
+{
+    return m_ID;
 }
 
 QVariant
@@ -93,8 +100,6 @@ SmokeGraphicsItem::itemChange(
 
         if (value.toBool()) {
             showHoverGraphicsItems();
-        } else {
-            hideHoverGraphicsItems();
         }
         break;
     }
@@ -105,11 +110,4 @@ SmokeGraphicsItem::itemChange(
     }
 
     return QGraphicsItem::itemChange(change, value);
-}
-
-int
-SmokeGraphicsItem::ID()
-const
-{
-    return m_ID;
 }

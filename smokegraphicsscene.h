@@ -68,7 +68,8 @@ public:
     //
 
     void
-    addItem(QGraphicsItem *item,
+    addItem(
+            QGraphicsItem *item,
             int layerIndex = SMOKE_LAYER_OBJECT
             );
 
