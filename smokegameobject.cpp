@@ -214,7 +214,7 @@ SmokeGameObject::data(
     case Qt::DisplayRole:
         break;
     case Qt::FontRole:
-        return QFont("Museo Slab", 12);
+        return QFont("Museo Slab 500", 10);
         if (col == 0)
         {
             QFont boldFont;

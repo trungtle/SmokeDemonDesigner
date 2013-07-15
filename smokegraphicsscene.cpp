@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QFontDatabase>
 #include "SmokeGraphicsScene.h"
 
 SmokeGraphicsScene::SmokeGraphicsScene(
@@ -151,7 +152,7 @@ SmokeGraphicsScene::createGrid()
     // Display some coord values
     //
 
-    QFont font("Museo Slab", 12);
+    QFont font("Museo Slab 500", 10);
     for (int x = left; x < right; x+= 100) {
         for (int y = top; y < bottom; y+= 100) {
 

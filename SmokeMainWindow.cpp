@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->setFont(QFont("Museo Slab 500", 10));
+
     //
     // Create objects
     //
