@@ -54,7 +54,7 @@ SmokeGraphicsView::wheelEvent(
     // Scale the view / do the zoom
     double scaleFactor = 1.15;
 
-    QPoint delta = event->pixelDelta();
+    QPoint delta = event->angleDelta();
     if(delta.y() > 0) {
         // Zoom in
         scale(scaleFactor, scaleFactor);
